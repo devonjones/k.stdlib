@@ -10,6 +10,11 @@ from datetime import date
 # COMMON
 
 class JSONObject():
+	"""
+	An object for storing de-serialzed json.  It behaves as both a dict and
+	an object, allowing a person to access {"foo": "bar"} as deser["foo"]
+	or deser.foo
+	"""
 
 	def __init__(self, json_class, values=None):
 		self.__dict__ = {}
@@ -99,6 +104,14 @@ def json_object_encoder(obj):
 	return {key: values}
 
 class JSONEncoder(_json.JSONEncoder):
+	"""
+	An encoder that knows how to encode to json most common field types from
+	databases.  Specifically, it can encode:
+	date
+	datetime
+	Decimal
+	JSONObject
+	"""
 
 	def __init__(self, encoders=None, **kwargs):
 		# We are using an OrderedDict because the order in which
@@ -185,6 +198,16 @@ def json_object_decoder(name, obj):
 	return json_obj
 
 class JSONDecoder(object):
+	"""
+	A decoder that knows how to decode from json most common types used in sql
+	databases.
+	Specifically, it can decode:
+	date
+	datetime
+	Decimal
+
+	Returned object is a JSONObject
+	"""
 
 	def __init__(self):
 		self.decoders = {}
