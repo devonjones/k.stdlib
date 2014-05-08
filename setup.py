@@ -22,6 +22,17 @@ def parse_requirements(file_name):
 		# comments and blank lines
 		if re.match(r"(^#)|(^$)", line):
 			continue
+		if line.startswith("git+"):
+			parts = line.split('#')
+			package = parts.pop().split('=').pop()
+			parts = '#'.join(parts).split('@')
+			if len(parts) == 3:
+				version = parts.pop()
+				if version.find('v') > -1:
+					version = version.replace('v', '')
+				line = "%s==%s" %(package, version)
+			else:
+				line = package
 		requirements.append(line)
 	return requirements
 
