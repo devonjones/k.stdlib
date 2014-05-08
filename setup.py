@@ -42,7 +42,7 @@ setup(
 	url = "https://wiki.knewton.net/index.php/Tech",
 	author = "Devon Jones",
 	author_email = "devon.jones@gmail.com",
-	license = "Proprietary",
+	license = "Apache 2.0",
 	packages = find_packages(),
 	cmdclass = {"test": PyTest},
 	package_data = {"config": ["requirements.txt"]},
