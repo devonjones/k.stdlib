@@ -3,7 +3,7 @@ and configuration of logging.
 """
 import logging
 import sys
-from k.stdlib.collections import defaultnamedtuple
+from kstdlib.collections import defaultnamedtuple
 
 _LoggingOptions = defaultnamedtuple( #pylint: disable-msg=C0103
 		'LoggingOptions',
@@ -51,7 +51,7 @@ def configure_logging(options):
 	"""Given an options object as returned by OptionParser,
 	configure the logging module per the requested config.
 
-	:type options: optparse.OptionParser or k.stdlib.logging.LoggingOptions
+	:type options: optparse.OptionParser or kstdlib.logging.LoggingOptions
 	:param options: The parsed command-line options per get_logging_options or LoggingOptions.
 	"""
 	#pylint: disable-msg=W0212

@@ -2,7 +2,7 @@ import unittest
 import sys
 from optparse import OptionParser
 from mock import Mock, patch
-from k.stdlib.logging.config import *
+from kstdlib.logging.config import *
 
 class LoggingConfigTests(unittest.TestCase):
 

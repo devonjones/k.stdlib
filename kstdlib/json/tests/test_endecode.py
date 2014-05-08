@@ -1,6 +1,6 @@
 import datetime
 import decimal
-import k.stdlib.json as json
+import kstdlib.json as json
 import unittest
 from StringIO import StringIO
 

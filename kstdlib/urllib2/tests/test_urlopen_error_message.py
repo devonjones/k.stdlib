@@ -1,12 +1,12 @@
 import httplib
-import k.stdlib.urllib2.urlopen_error_message
+import kstdlib.urllib2.urlopen_error_message
 import logging
 import mock
 import socket
 import unittest
 import urllib2
 from StringIO import StringIO
-from k.stdlib.urllib2 import urlopen
+from kstdlib.urllib2 import urlopen
 
 class UrlopenTests(unittest.TestCase):
 
@@ -45,7 +45,7 @@ Content-Type: text/html; charset=UTF-8
 	def test_urlopen_httperror(self):
 		url = self.url
 		error = urllib2.HTTPError(self.url, 404, "Not Found", self.headers, self.fp)
-		#print error.msg # Not Found 
+		#print error.msg # Not Found
 		with mock.patch('urllib2.urlopen') as mock_urlopen:
 			mock_urlopen.side_effect = error
 			try:
@@ -59,7 +59,7 @@ Content-Type: text/html; charset=UTF-8
 	def test_urlopen_httperror_2(self):
 		url = urllib2.Request(self.url)
 		error = urllib2.HTTPError(self.url, 404, "Not Found", self.headers, self.fp)
-		#print error.msg # Not Found 
+		#print error.msg # Not Found
 		with mock.patch('urllib2.urlopen') as mock_urlopen:
 			mock_urlopen.side_effect = error
 			try:
@@ -74,7 +74,7 @@ Content-Type: text/html; charset=UTF-8
 		url = self.url
 		fp = StringIO("<!doctype html>\n<html>\n<title>404 Not Found</title>\n</html>\n")
 		error = urllib2.HTTPError(self.url, 404, "Not Found", self.headers, fp)
-		#print error.msg # Not Found 
+		#print error.msg # Not Found
 		with mock.patch('urllib2.urlopen') as mock_urlopen:
 			mock_urlopen.side_effect = error
 			try:
@@ -89,7 +89,7 @@ Content-Type: text/html; charset=UTF-8
 		url = self.url
 		fp = StringIO('{"status": "404 Not Found"}')
 		error = urllib2.HTTPError(self.url, 404, "Not Found", self.headers, fp)
-		#print error.msg # Not Found 
+		#print error.msg # Not Found
 		with mock.patch('urllib2.urlopen') as mock_urlopen:
 			mock_urlopen.side_effect = error
 			try:
@@ -139,7 +139,7 @@ Content-Type: text/html; charset=UTF-8
 		response.code = 200
 		response.msg = "OK"
 		with mock.patch('logging.debug') as mock_debug:
-			k.stdlib.urllib2.urlopen_error_message._dump_response(response)
+			kstdlib.urllib2.urlopen_error_message._dump_response(response)
 
 	def test__process_response(self):
 		response = mock.Mock()
@@ -152,7 +152,7 @@ Content-Type: text/html; charset=UTF-8
 		assert "readline" not in dir(response)
 		assert "readlines" not in dir(response)
 
-		k.stdlib.urllib2.urlopen_error_message._process_response(response)
+		kstdlib.urllib2.urlopen_error_message._process_response(response)
 
 		assert "__iter__" in dir(response)
 		assert "fileno" in dir(response)
@@ -189,13 +189,13 @@ Content-Type: text/html; charset=UTF-8
 		assert "readline" not in dir(response)
 		assert "readlines" not in dir(response)
 
-		with mock.patch('k.stdlib.urllib2.urlopen_error_message.StringIO') as mock_stringio:
+		with mock.patch('kstdlib.urllib2.urlopen_error_message.StringIO') as mock_stringio:
 			fp = mock.Mock(spec=['read', 'readline', 'fileno'])
 			fp.read = lambda: None
 			fp.readline = lambda: None
 			fp.fileno = lambda: 0
 			mock_stringio.return_value = fp
-			k.stdlib.urllib2.urlopen_error_message._process_response(response)
+			kstdlib.urllib2.urlopen_error_message._process_response(response)
 
 		assert "__iter__" not in dir(response)
 		assert "fileno" in dir(response)

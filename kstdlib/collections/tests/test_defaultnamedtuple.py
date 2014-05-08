@@ -1,5 +1,5 @@
 import unittest
-from k.stdlib.collections import defaultnamedtuple
+from kstdlib.collections import defaultnamedtuple
 
 class DefaultnamedtupleTests(unittest.TestCase):
 

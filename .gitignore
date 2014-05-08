@@ -1,0 +1,63 @@
+# Test Data
+firstTest.*
+
+# compiled code
+*.pyc
+*.c
+*.so
+
+# swap files
+*.swp
+*.swo
+*~
+*#
+
+# apple cruft
+.DS_Store
+
+# py.test artifacts
+__pycache__
+
+# log files
+*.log
+
+# coverage files
+.coverage
+.coverage.*
+coverage.xml
+htmlcov
+pylint-report.txt
+
+# ide files
+.komodoproject
+.komodotools
+.classpath
+.project
+.pydevproject
+.settings
+.idea
+*.iml
+*.ipr
+*.iws
+
+# build files
+target
+dist/
+*.egg-info/
+build/
+MANIFEST
+*.zip
+venv/
+Berksfile.lock
+
+# Profiler
+Profile.prof
+
+# Reports
+*.html
+
+# Eggs
+*.egg
+
+# Vagrant
+.vagrant
