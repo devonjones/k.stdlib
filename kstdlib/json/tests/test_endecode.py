@@ -89,14 +89,12 @@ class JSONEncoderTests(unittest.TestCase):
 		assert expected == actual
 
 	def test_decimal_dumps(self):
-		expected = ('{"__decimal__": {"__string_repr__": "10001e-1", '
-				'"__float_repr__": 1000.1}}')
+		expected = ('{"__decimal__": {"__string_repr__": "10001e-1"}}')
 		actual = json.dumps(decimal.Decimal('1000.1'))
 		assert expected == actual
 
 	def test_decimal_dumps_negative(self):
-		expected = ('{"__decimal__": {"__string_repr__": "-10001e-1", '
-				'"__float_repr__": -1000.1}}')
+		expected = ('{"__decimal__": {"__string_repr__": "-10001e-1"}}')
 		actual = json.dumps(decimal.Decimal('-1000.1'))
 		assert expected == actual
 

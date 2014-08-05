@@ -92,7 +92,6 @@ def decimal_encoder(obj):
 	tmp += str(exponent)
 
 	values['__string_repr__'] = tmp
-	values['__float_repr__'] = float(obj)
 	return payload
 
 def json_object_encoder(obj):

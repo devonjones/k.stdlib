@@ -38,7 +38,7 @@ def parse_requirements(file_name):
 
 setup(
 	name = "kstdlib",
-	version = "0.3.0",
+	version = "0.3.1",
 	url = "https://wiki.knewton.net/index.php/Tech",
 	author = "Devon Jones",
 	author_email = "devon.jones@gmail.com",
