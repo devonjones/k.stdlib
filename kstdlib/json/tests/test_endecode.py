@@ -76,32 +76,32 @@ class JSONEncoderTests(unittest.TestCase):
 		assert expected == actual
 
 	def test_string_dumps(self):
-		assert '"foobar"\n' == json.dumps("foobar")
+		assert '"foobar"' == json.dumps("foobar")
 
 	def test_datetime_dumps(self):
-		expected = ('{"__datetime__": "2000-01-01T00:00:00"}\n')
+		expected = ('{"__datetime__": "2000-01-01T00:00:00"}')
 		actual = json.dumps(datetime.datetime(2000, 1, 1))
 		assert expected == actual
 
 	def test_date_dumps(self):
-		expected = ('{"__date__": "2000-01-01"}\n')
+		expected = ('{"__date__": "2000-01-01"}')
 		actual = json.dumps(datetime.date(2000, 1, 1))
 		assert expected == actual
 
 	def test_decimal_dumps(self):
 		expected = ('{"__decimal__": {"__string_repr__": "10001e-1", '
-				'"__float_repr__": 1000.1}}\n')
+				'"__float_repr__": 1000.1}}')
 		actual = json.dumps(decimal.Decimal('1000.1'))
 		assert expected == actual
 
 	def test_decimal_dumps_negative(self):
 		expected = ('{"__decimal__": {"__string_repr__": "-10001e-1", '
-				'"__float_repr__": -1000.1}}\n')
+				'"__float_repr__": -1000.1}}')
 		actual = json.dumps(decimal.Decimal('-1000.1'))
 		assert expected == actual
 
 	def test_jsonobject_dumps(self):
-		expected = '{"__user__": {"first_name": "Isaak", "last_name": "Knewton", "email": null}}\n'
+		expected = '{"__user__": {"first_name": "Isaak", "last_name": "Knewton", "email": null}}'
 		json_object = json.JSONObject('__user__', {
 				'first_name': 'Isaak',
 				'last_name': 'Knewton',
@@ -134,56 +134,21 @@ class JSONEncoderTests(unittest.TestCase):
 	def test_string_loads(self):
 		assert json.loads('"foobar"\n') == 'foobar'
 
-	def test_datetime_loads_legacy(self):
-		expected = datetime.datetime(2000, 1, 31)
-		data = ('{"__datetime__": {"hour": 0, "month": 1, "second": 0, '
-				'"microsecond": 0, "__string_repr__": "2000-01-31T00:00:00", '
-				'"year": 2000, "tzinfo": null, "day": 31, "minute": 0}}\n')
-		actual = json.loads(data)
-		assert expected == actual
-
 	def test_datetime_loads(self):
 		expected = datetime.datetime(2000, 1, 31, 12, 34, 56)
-		data = ('{"__datetime__": "2000-01-31T12:34:56"}\n')
+		data = ('{"__datetime__": "2000-01-31T12:34:56"}')
 		actual = json.loads(data)
 		assert expected == actual
 
 	def test_datetime_loads_with_microsecond(self):
 		expected = datetime.datetime(2000, 1, 31, 12, 34, 56, 999999)
-		data = ('{"__datetime__": "2000-01-31T12:34:56.999999"}\n')
-		actual = json.loads(data)
-		assert expected == actual
-
-	def test_date_loads_legacy(self):
-		expected = datetime.date(2000, 1, 31)
-		data = ('{"__date__": {"month": 1, "__string_repr__": '
-				'"2000-01-31", "day": 31, "year": 2000}}\n')
+		data = ('{"__datetime__": "2000-01-31T12:34:56.999999"}')
 		actual = json.loads(data)
 		assert expected == actual
 
 	def test_date_loads(self):
 		expected = datetime.date(2000, 1, 31)
 		data = ('{"__date__": "2000-01-31"}\n')
-		actual = json.loads(data)
-		assert expected == actual
-
-	def test_decimal_loads_tuple_legacy(self):
-		expected = decimal.Decimal('1000.1')
-		data = ('{"__decimal__": {"tuple": [0, [1, 0, 0, 0, 1], -1]}}')
-		actual = json.loads(data)
-		assert expected == actual
-
-	def test_decimal_loads_digits_legacy(self):
-		expected = decimal.Decimal('1000.1')
-		data = ('{"__decimal__": {"coefficient": [1, 0, 0, 0, 1], '
-				'"exponent": -1, "__float_repr__": 1000.1, "sign": 0}}\n')
-		actual = json.loads(data)
-		assert expected == actual
-
-	def test_decimal_loads_coefficient_legacy(self):
-		expected = decimal.Decimal('1000.1')
-		data = ('{"__decimal__": {"coefficient": 10001, '
-				'"exponent": -1, "__float_repr__": 1000.1, "sign": 0}}\n')
 		actual = json.loads(data)
 		assert expected == actual
 

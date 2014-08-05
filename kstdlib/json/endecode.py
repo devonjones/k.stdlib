@@ -1,5 +1,3 @@
-import warnings
-warnings.filterwarnings('ignore', 'Module _mysql was already imported from.*', UserWarning, 'simplejson')
 import copy
 import json as _json
 from collections import OrderedDict
@@ -9,7 +7,7 @@ from datetime import date
 
 # COMMON
 
-class JSONObject():
+class JSONObject(object):
 	"""
 	An object for storing de-serialzed json.  It behaves as both a dict and
 	an object, allowing a person to access {"foo": "bar"} as deser["foo"]
@@ -139,57 +137,23 @@ class JSONEncoder(_json.JSONEncoder):
 		return _json.JSONEncoder.default(self, obj)
 
 def dumps(obj, cls=JSONEncoder, **kwargs):
-	return _json.dumps(obj, cls=cls, **kwargs) + "\n"
+	return _json.dumps(obj, cls=cls, **kwargs)
 
-def dump(obj, fp, cls=JSONEncoder, **kwargs):
-	return _json.dump(obj, fp, cls=cls, **kwargs)
+def dump(obj, jsonfile, cls=JSONEncoder, **kwargs):
+	return _json.dump(obj, jsonfile, cls=cls, **kwargs)
 
 # DECODERS
 
-def _legacy_datetime_decoder(obj):
-	return datetime(obj['year'], obj['month'], obj['day'], obj['hour'],
-			obj['minute'], obj['second'], obj['microsecond'],
-			obj['tzinfo'])
-
 def datetime_decoder(obj):
-	if not isinstance(obj, basestring):
-		return _legacy_datetime_decoder(obj)
-
 	if '.' in obj:
 		return datetime.strptime(obj, '%Y-%m-%dT%H:%M:%S.%f')
 	else:
 		return datetime.strptime(obj, '%Y-%m-%dT%H:%M:%S')
 
-def _legacy_date_decoder(obj):
-	return date(obj['year'], obj['month'], obj['day'])
-
 def date_decoder(obj):
-	if not isinstance(obj, basestring):
-		return _legacy_date_decoder(obj)
-
 	return datetime.strptime(obj, '%Y-%m-%d').date()
 
-def _legacy_decimal_decoder(obj):
-	if 'tuple' in obj:
-		return Decimal(obj['tuple'])
-
-	sign = obj['sign']
-	coefficient = obj['coefficient']
-	exponent = obj['exponent']
-	digits = []
-	if type(coefficient) == list:
-		digits = coefficient
-	else:
-		while coefficient > 0:
-			digits.insert(0, coefficient % 10)
-			coefficient /= 10
-
-	return Decimal((sign, digits, exponent))
-
 def decimal_decoder(obj):
-	if '__string_repr__' not in obj:
-		return _legacy_decimal_decoder(obj)
-
 	return Decimal(obj['__string_repr__'])
 
 def json_object_decoder(name, obj):
@@ -218,18 +182,21 @@ class JSONDecoder(object):
 	def add_decoder(self, name, decoder):
 		self.decoders[name] = decoder
 
-	def object_decoder(self, d):
+	def object_decoder(self, obj_literal):
 		for name in self.decoders:
-			if name in d:
-				obj = d[name]
+			if name in obj_literal:
+				obj = obj_literal[name]
 				decoder = self.decoders[name]
 				return decoder(obj)
 
-		for name in d:
-			if name.startswith('__') and name.endswith('__') and not name.endswith('repr__'):
-				return json_object_decoder(name, d[name])
+		for name in obj_literal:
+			starts = name.startswith('__')
+			ends = name.endswith('__')
+			reprn = name.endswith('repr__')
+			if starts and ends and not reprn:
+				return json_object_decoder(name, obj_literal[name])
 
-		return d
+		return obj_literal
 
 	def loads(self, obj, **kwargs):
 		return _json.loads(obj, object_hook=self.object_decoder, **kwargs)
